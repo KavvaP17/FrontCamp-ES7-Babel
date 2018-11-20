@@ -1,5 +1,9 @@
 "use strict";
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -50,24 +54,52 @@ function () {
     }
   }, {
     key: "search",
-    value: function search() {
-      var _this = this;
+    value: function () {
+      var _search = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var channel, recordsCount, jsonData, fragment;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.switchLoader();
+                channel = this.channels[this.selectedChanelIndex].value;
+                recordsCount = this.recordsCount[this.selectedRecordCountIndex].value;
+                _context.prev = 3;
+                _context.next = 6;
+                return this.api.getData(channel, recordsCount);
 
-      this.switchLoader();
-      var channel = this.channels[this.selectedChanelIndex].value;
-      var recordsCount = this.recordsCount[this.selectedRecordCountIndex].value;
-      this.api.getData(channel, recordsCount).then(function (jsonData) {
-        var fragment = _this.articles.parseDataToHtmlFragment(jsonData);
+              case 6:
+                jsonData = _context.sent;
+                fragment = this.articles.parseDataToHtmlFragment(jsonData);
+                this.resultConteiner.innerHTML = "";
+                this.resultConteiner.appendChild(fragment);
+                _context.next = 15;
+                break;
 
-        _this.resultConteiner.innerHTML = "";
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](3);
+                console.log(_context.t0.message);
 
-        _this.resultConteiner.appendChild(fragment);
+              case 15:
+                _context.prev = 15;
+                this.switchLoader();
+                return _context.finish(15);
 
-        _this.switchLoader();
-      }).catch(function (error) {
-        return console.log(error.message);
-      });
-    }
+              case 18:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[3, 12, 15, 18]]);
+      }));
+
+      return function search() {
+        return _search.apply(this, arguments);
+      };
+    }()
   }, {
     key: "switchLoader",
     value: function switchLoader() {

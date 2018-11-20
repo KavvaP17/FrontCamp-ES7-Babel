@@ -37,19 +37,22 @@ class Main {
         target.appendChild(fragment);
     }
 
-    search() {
+    async search() {
         this.switchLoader();
 
         const channel = this.channels[this.selectedChanelIndex].value;
         const recordsCount = this.recordsCount[this.selectedRecordCountIndex].value;
-        this.api.getData(channel,recordsCount)
-            .then(jsonData => {
-                const fragment = this.articles.parseDataToHtmlFragment(jsonData);
-                this.resultConteiner.innerHTML = "";
-                this.resultConteiner.appendChild(fragment);
-                this.switchLoader();
-            })
-            .catch(error => console.log(error.message));
+        try{
+            const jsonData = await this.api.getData(channel,recordsCount);
+            const fragment = this.articles.parseDataToHtmlFragment(jsonData);
+            this.resultConteiner.innerHTML = "";
+            this.resultConteiner.appendChild(fragment);
+        } catch(error) {
+            console.log(error.message)
+        } finally {
+            this.switchLoader();
+        }
+        
     }
 
     switchLoader() {
